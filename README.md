@@ -1,4 +1,5 @@
 # HackathonProject2022
 
 ## Goals:
-    Create a cookie clicker esque game that is mental health oriented.
+    Create Python script that automatically enrolls you into courses
+    
