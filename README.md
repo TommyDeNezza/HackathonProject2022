@@ -1,4 +1,4 @@
 # HackathonProject2022
 
 ## Goals:
-    Create a cookie clicker esc game that is mental health oriented.
+    Create a cookie clicker esque game that is mental health oriented.
