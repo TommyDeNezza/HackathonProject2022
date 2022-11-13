@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.options import Options
 import json
+import time
 
 userInfo = json.load(open("login.json"))
 username = userInfo.get("user")
@@ -43,16 +44,28 @@ def refresh():
 def enroll():
     first = '//*[@id="tabularCCRegistrationRequestItemSelectorCheckbox'
     for i in range(15):
-        id = first + str(i)
+        driver.implicitly_wait(20)
+        id = first + str(i) + '"]'
         try:
             checkbox = driver.find_element(By.XPATH, id)
             checkbox.click()
+            enroll = driver.find_element(By.XPATH, '//*[@id="register-button"]')
+            enroll.click()
+            driver.implicitly_wait(25000)
         except:
             break
 #Main
 def main():
     initialization()
-    refresh()
-    enroll()
+    
+    driver.implicitly_wait(60)
+    print("\n\n",driver.find_element(By.XPATH, '//*[@id="tabularCCRegistrationRequestItemSelectorAutomaticRegistration"]'),"\n\n")
+    #print("\n\n",driver.find_element(By.XPATH, '//*[@id="tabularCCRegistrationRequestItemSelectorRegistrationPlan1"]'),"\n\n")
+
+    # while True:
+    #     enroll()
+    #     refresh()
+    #     time.sleep(60)
 
 main()
+
