@@ -1,4 +1,6 @@
 {
     "user": "",
-    "password": ""
+    "password": "",
+    "semester": "",
+    "plan": ""
 }

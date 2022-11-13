@@ -8,10 +8,6 @@ import time
 import logging as log
 import sys
 
-username = "montessm"
-password = "Shak1r81"
-semester = "Spring 2023"
-registrationPlan = "Automated Registration"
 
 chrome_options = Options()
 chrome_options.add_experimental_option("detach", True)
@@ -19,24 +15,22 @@ driver = webdriver.Chrome(options = chrome_options)
 
 #Registration Page 
 def initialization():
+    userInfo = json.load(open("login.json"))
     driver.get("https://login.bc.edu/nidp/idff/sso?id=19&sid=0&option=credential&sid=0&target=https%3A%2F%2Fservices.bc.edu%2Fcommoncore%2Fmyservices.do")
     ag_username = driver.find_element(By.ID, 'username')
-    ag_username.send_keys(username)
+    ag_username.send_keys(userInfo.get("user"))
     ag_password = driver.find_element(By.ID, 'password')
-    ag_password.send_keys(password)
+    ag_password.send_keys(userInfo.get("password"))
     ag_sign_in_button = driver.find_element(By.XPATH, '//*[@id="fm1"]/button')
     ag_sign_in_button.click()
     driver.implicitly_wait(10)
     driver.get("https://eaen.bc.edu/student-registration/#/")
     driver.implicitly_wait(30)
     term_pullup = driver.find_element(By.XPATH, '//*[@id="fddAtpSelectorInputTopDiv"]/div/div/div/span/i')
-    driver.implicitly_wait(30)
     term_pullup.click()
-    selectSem = makeSelection(['//*[@id="ui-select-choices-row-0-', '"]'], semester, 3)
-    driver.implicitly_wait(30)
+    selectSem = makeSelection(['//*[@id="ui-select-choices-row-0-', '"]'], userInfo.get("semester"), 3)
     selectSem.click()
-    selectPlan = makeSelection(['//*[@id="tabularCCRegistrationRequestItemSelectorRegistrationPlan','"]'], registrationPlan, 3)
-    driver.implicitly_wait(30)
+    selectPlan = makeSelection(['//*[@id="tabularCCRegistrationRequestItemSelectorRegistrationPlan','"]'], userInfo.get("plan"), 3)
     selectPlan.click()
 
 
@@ -79,7 +73,7 @@ def main():
     while True:
          enroll()
          refresh()
-         time.sleep(60)
+         time.sleep(300)
 
 main()
 
