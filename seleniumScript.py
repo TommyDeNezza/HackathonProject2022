@@ -6,6 +6,7 @@ from selenium.webdriver.chrome.options import Options
 
 import json
 import time
+import logging as log
 
 chrome_options = Options()
 chrome_options.add_experimental_option("detach", True)
@@ -25,9 +26,18 @@ def initialization(username, password):
     driver.implicitly_wait(30)
     term_pullup = driver.find_element(By.XPATH, '//*[@id="fddAtpSelectorInputTopDiv"]/div/div/div/span/i')
     term_pullup.click()
-    spring = driver.find_element(By.XPATH, '//*[@id="ui-select-choices-row-0-0"]') #to be replaced
-    fall = driver.find_element(By.XPATH, '//*[@id="ui-select-choices-row-0-1"]')
-    spring.click()
+    selectSem = driver.find_element(By.XPATH, '//*[@id="ui-select-choices-row-0-0"]')
+    for i in range(3):
+        try:
+            pot = driver.find_element(By.XPATH, '//*[@id="ui-select-choices-row-0-'+i+'"]')
+            outer = str(pot.get_attribute('outerHTML'))
+            print(outer)
+            if semester in outer:
+              selectSem = pot
+        except:
+            log.error("Improper Semester String")
+            break
+    selectSem.click()
 
 def refresh():
     driver.implicitly_wait(60)
@@ -41,14 +51,14 @@ def refresh():
 def enroll():
     first = '//*[@id="tabularCCRegistrationRequestItemSelectorCheckbox'
     for i in range(15):
-        driver.implicitly_wait(20)
+        time.sleep(3)
+        driver.implicitly_wait(5)
         id = first + str(i) + '"]'
         try:
             checkbox = driver.find_element(By.XPATH, id)
             checkbox.click()
             enroll = driver.find_element(By.XPATH, '//*[@id="register-button"]')
             enroll.click()
-            driver.implicitly_wait(25000)
         except:
             break
 #Main
@@ -61,8 +71,13 @@ def main():
         password = userInfo.get("password")
         if username and password:
             break
-    initialization(username, password)
-    driver.implicitly_wait(60)
+    initialization()
+    driver.implicitly_wait(5)
+    time.sleep(5)
+    while True:
+         enroll()
+         refresh()
+         time.sleep(60)
             
     # print("\n\n",driver.find_element(By.XPATH, '//*[@id="tabularCCRegistrationRequestItemSelectorAutomaticRegistration"]'),"\n\n")
     #print("\n\n",driver.find_element(By.XPATH, '//*[@id="tabularCCRegistrationRequestItemSelectorRegistrationPlan1"]'),"\n\n")
@@ -73,4 +88,5 @@ def main():
     #     time.sleep(60)
 
 main()
+
 
