@@ -40,4 +40,22 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
   </body>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+  <script>
+    function myfunction() {
+
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        const dict_values = {username, password} //Pass the javascript variables to a dictionary.
+        const s = JSON.stringify(dict_values); // Stringify converts a JavaScript object or value to JSON.
+        console.log(s); // Prints the variables to console window, which are in the JSON format
+        //window.alert(s)
+        $.ajax({
+            url:"/loggedin",
+            type:"POST",
+            contentType: "application/json",
+            data: JSON.stringify(s)});
+}
+</script>
 </html>

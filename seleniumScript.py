@@ -62,31 +62,13 @@ def enroll():
         except:
             break
 #Main
-def main():
-    username = ""
-    password = ""
-    while True:
-        userInfo = json.load(open("login.json"))
-        username = userInfo.get("user")
-        password = userInfo.get("password")
-        if username and password:
-            break
-    initialization()
+def main(username, password):
+    initialization(username, password)
     driver.implicitly_wait(5)
     time.sleep(5)
     while True:
          enroll()
          refresh()
          time.sleep(60)
-            
-    # print("\n\n",driver.find_element(By.XPATH, '//*[@id="tabularCCRegistrationRequestItemSelectorAutomaticRegistration"]'),"\n\n")
-    #print("\n\n",driver.find_element(By.XPATH, '//*[@id="tabularCCRegistrationRequestItemSelectorRegistrationPlan1"]'),"\n\n")
 
-    # while True:
-    #     enroll()
-    #     refresh()
-    #     time.sleep(60)
-
-main()
-
-
+main("montessm", "Shak1r81")
