@@ -7,12 +7,16 @@ from selenium.webdriver.chrome.options import Options
 import json
 import time
 
+# userInfo = json.load(open("login.json"))
+# username = userInfo.get("user")
+# password = userInfo.get("password")
+
 chrome_options = Options()
 chrome_options.add_experimental_option("detach", True)
 driver = webdriver.Chrome(options = chrome_options)
 
 #Registration Page 
-def initialization(username, password):
+def initialization():
     driver.get("https://login.bc.edu/nidp/idff/sso?id=19&sid=0&option=credential&sid=0&target=https%3A%2F%2Fservices.bc.edu%2Fcommoncore%2Fmyservices.do")
     ag_username = driver.find_element(By.ID, 'username')
     ag_username.send_keys(username)
@@ -53,24 +57,13 @@ def enroll():
             break
 #Main
 def main():
-    username = ""
-    password = ""
-    while True:
-        userInfo = json.load(open("login.json"))
-        username = userInfo.get("user")
-        password = userInfo.get("password")
-        if username and password:
-            break
-    initialization(username, password)
+    initialization()
+    
     driver.implicitly_wait(60)
-            
-    # print("\n\n",driver.find_element(By.XPATH, '//*[@id="tabularCCRegistrationRequestItemSelectorAutomaticRegistration"]'),"\n\n")
+    print("\n\n",driver.find_element(By.XPATH, '//*[@id="tabularCCRegistrationRequestItemSelectorAutomaticRegistration"]'),"\n\n")
     #print("\n\n",driver.find_element(By.XPATH, '//*[@id="tabularCCRegistrationRequestItemSelectorRegistrationPlan1"]'),"\n\n")
 
     # while True:
     #     enroll()
     #     refresh()
     #     time.sleep(60)
-
-main()
-
