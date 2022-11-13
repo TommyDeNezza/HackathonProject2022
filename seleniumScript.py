@@ -6,11 +6,13 @@ from selenium.webdriver.chrome.options import Options
 import json
 import time
 import logging as log
+import sys
 
 userInfo = json.load(open("login.json"))
 username = userInfo.get("user")
 password = userInfo.get("password")
-semester = "Fall 2022"
+semester = "Spring 2023"
+registrationPlan = "Automatic Registration"
 
 chrome_options = Options()
 chrome_options.add_experimental_option("detach", True)
@@ -30,18 +32,20 @@ def initialization():
     driver.implicitly_wait(30)
     term_pullup = driver.find_element(By.XPATH, '//*[@id="fddAtpSelectorInputTopDiv"]/div/div/div/span/i')
     term_pullup.click()
-    selectSem = driver.find_element(By.XPATH, '//*[@id="ui-select-choices-row-0-0"]')
-    for i in range(3):
-        try:
-            pot = driver.find_element(By.XPATH, '//*[@id="ui-select-choices-row-0-'+i+'"]')
-            outer = str(pot.get_attribute('outerHTML'))
-            print(outer)
-            if semester in outer:
-              selectSem = pot
-        except:
-            log.error("Improper Semester String")
-            break
+    selectSem = makeSelection(['//*[@id="ui-select-choices-row-0-', '"]'], semester, 3)
     selectSem.click()
+    selectPlan = makeSelection(['//*[@id="tabularCCRegistrationRequestItemSelectorRegistrationPlan','"]'], registrationPlan, 3)
+    selectPlan.click()
+
+
+def makeSelection(path, selection, length):
+    for i in range(length):
+        potential = driver.find_element(By.XPATH, path[0]+str(i)+path[1]) #Have it save the first half of string in path 0 and second in path 1
+        innerString = potential.get_attribute('innerHTML')
+        log.info(innerString) 
+        if selection in innerString:
+            return potential
+    return
 
 def refresh():
     driver.implicitly_wait(60)
@@ -67,7 +71,7 @@ def enroll():
             break
 #Main
 def main():
-    initialization()
+    error = initialization()
     driver.implicitly_wait(5)
     time.sleep(5)
     while True:
